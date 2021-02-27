@@ -15,4 +15,4 @@
         <img src="https://img.shields.io/twitter/follow/code_report.svg?style=social&label=@code_report" /></a>
 </p>
 
-Package for multidimensional arrays and common array programming language algorithms.
+A C++ algorithm library that extends the C++ standard algorithms found in `<algorithm>` & `<numeric>`.
