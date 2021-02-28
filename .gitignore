@@ -1,0 +1,4 @@
+#clion build folders.
+cmake-build-*/*
+#clion settings.
+.idea/*
