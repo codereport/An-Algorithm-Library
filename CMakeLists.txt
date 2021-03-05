@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.19)
+cmake_minimum_required(VERSION 3.18)
 project(An-Algorithm-Library C CXX)
 
 set(CMAKE_CXX_STANDARD 17) ## Supported values are 98, 11, 14, 17, and 20.
