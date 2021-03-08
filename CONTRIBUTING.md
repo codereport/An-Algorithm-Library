@@ -26,3 +26,9 @@
     ```sh
     ninja -C build test
     ```
+   * For more verbose output:
+
+    ```sh
+    cd build && ctest -C debug --verbose && cd ..
+    ```
+   
