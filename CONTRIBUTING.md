@@ -24,5 +24,5 @@
     ```
 4. Run tests:
     ```sh
-    #ninja -C build test
+    ninja -C build test
     ```
