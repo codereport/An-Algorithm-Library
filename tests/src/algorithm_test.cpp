@@ -3,6 +3,7 @@
 #include "aal/algorithm.hpp"
 #include <array>
 #include <ranges>
+#include <numeric>
 /**
  * multiply all the parameter pack values together
  * @note if sizeof...(a) == 1 it returns a.
@@ -72,14 +73,26 @@ template <typename I, typename... Is, std::ranges::range O, typename Op>
   aal::var::transform(op, std::ranges::begin(o), f, l, fs...);
   return o;
 }
+/**
+ * Eager constant time construct a std::array of numbers using iota.
+ * @tparam start number
+ * @tparam count of values
+ * @return std::array from start to start+count
+ */
+template<auto start, std::size_t count>
+requires(count < std::numeric_limits<decltype(start)>::max()-start)
+[[nodiscard]] consteval auto iota()
+{
+  auto ret = std::array<decltype(start), count>{};
+  std::iota(std::ranges::begin(ret),std::ranges::end(ret), start);
+  return ret;
+}
 int main() {
   using namespace boost::ut::literals;
   using namespace boost::ut::operators::terse;
   using namespace boost::ut;
   [[maybe_unused]] suite tests = [] {
-    static constexpr std::array input{
-        0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
-    };
+    static constexpr auto input = iota<0,10U>();
     static constexpr auto b = std::ranges::begin(input);
     static constexpr auto e = std::ranges::end(input);
     "plus"_test = []{
