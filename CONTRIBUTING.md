@@ -23,7 +23,6 @@
     ninja -C build -f build-Release.ninja
     ```
 4. Run tests:
-   `wip i'm not sure why this command isn't working.`
     ```sh
     #ninja -C build test
     ```
