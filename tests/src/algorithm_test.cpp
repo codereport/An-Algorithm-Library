@@ -54,7 +54,7 @@ static constexpr auto make_unsigned = [](const auto &op, auto const &...a) {
       (static_cast<std::make_unsigned_t<std::decay_t<decltype(a)>>>(a))...);
 };
 /**
- * Eagar transform and output to rvalue range
+ * Eager transform and output to rvalue range
  * @tparam I first range iterator type
  * @tparam Is other range iterators type
  * @tparam O output range r-value type
@@ -135,6 +135,8 @@ int main() {
           transform([&](const auto &...a) { return plus(3, a...); },
                     std::array<int, sizeof(input)>(), b, e);
       expect(constant<result[3] == 6>);
+      expect(constant<result[2] == 5>);
+      expect(constant<result[1] == 4>);
     };
     "transform + 2x"_test = [&] {
       std::array<int, sizeof(input)> result{};
@@ -149,6 +151,20 @@ int main() {
       expect(constant<result[3] == 6>);
       expect(constant<result[2] == 4>);
       expect(constant<result[1] == 2>);
+    };
+    "transform + 3x"_test = [&] {
+      std::array<int, sizeof(input)> result{};
+      aal::var::transform(plus, std::ranges::begin(result), b, e, b,b);
+      expect(result[3] == 9_i);
+      expect(result[2] == 6_i);
+      expect(result[1] == 3_i);
+    };
+    "transform + 3x constexpr"_test = [&] {
+      constexpr auto result =
+          transform(plus, std::array<int, sizeof(input)>(), b, e, b,b);
+      expect(constant<result[3] == 9>);
+      expect(constant<result[2] == 6>);
+      expect(constant<result[1] == 3>);
     };
   };
 }
