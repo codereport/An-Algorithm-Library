@@ -8,5 +8,10 @@ set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON) ## automatically create a module defini
                                          ## symbols found in the input .obj files for a SHARED library on Windows.
 
 add_subdirectory(src)
-enable_testing()
+# see https://cliutils.gitlab.io/modern-cmake/chapters/testing.html
+if (CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+    include(CTest)
+endif ()
+if ((CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME) AND BUILD_TESTING)
 add_subdirectory(tests)
+endif ()
