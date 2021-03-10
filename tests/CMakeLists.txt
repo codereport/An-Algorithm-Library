@@ -8,7 +8,13 @@ target_link_libraries(${PROJECT_NAME}_algorithm_test
         PRIVATE Boost::ut
         PRIVATE ${PROJECT_NAME}_aal
         PRIVATE ${PROJECT_NAME}_project_warnings)
-set_target_properties(${PROJECT_NAME}_algorithm_test PROPERTIES OUTPUT_NAME "algorithm_test")
+#https://cliutils.gitlab.io/modern-cmake/chapters/features/cpp11.html
+target_compile_features(${PROJECT_NAME}_algorithm_test PRIVATE cxx_std_20)
+set_target_properties(${PROJECT_NAME}_algorithm_test PROPERTIES
+        OUTPUT_NAME "algorithm_test"
+        CXX_EXTENSIONS OFF
+        CXX_STANDARD_REQUIRED ON
+        WINDOWS_EXPORT_ALL_SYMBOLS OFF)
 add_test(
         NAME ${PROJECT_NAME}_ALGORITHM_TEST COMMAND ${PROJECT_NAME}_algorithm_test
 )
