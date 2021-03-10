@@ -7,20 +7,11 @@
     ```sh
     git clone https://github.com/codereport/An-Algorithm-Library.git
     ```
-3. Build An Algorithm Library:    
-   * Run cmake:
+3. Run cmake:
     ```sh
     cd An-Algorithm-Library
     mkdir build
     cmake -G "Ninja Multi-Config" -B build
-    ```
-   * To build debug:
-    ```sh
-    ninja -C build 
-    ```
-   * To build release:
-    ```sh
-    ninja -C build -f build-Release.ninja
     ```
 4. Run tests:
     ```sh
@@ -29,6 +20,6 @@
    * For more verbose output:
 
     ```sh
-    cd build && ctest -C debug --verbose && cd ..
+    ninja -C build && cd build && ctest -C debug --verbose && cd ..
     ```
    
