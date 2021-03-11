@@ -2,7 +2,6 @@
 // import boost.ut;        // single module (C++20)
 #include <array>
 #include <numeric>
-#include <ranges>
 #include "aal/algorithm.hpp"
 /**
  * multiply all the parameter pack values together
@@ -70,10 +69,14 @@ static constexpr auto make_unsigned = [](const auto &op, const auto &...a) {
  * @return returns output range post transform.
  */
 
-template <typename I, typename... Is, std::ranges::range O, typename Op>
+template <typename I, typename... Is, typename O, typename Op>
+requires requires (O && o)
+{
+    std::begin(o);
+}
 [[nodiscard]] consteval auto
 transform(const Op op, O &&o, I f, const I l, Is... fs) {
-    aal::var::transform(op, std::ranges::begin(o), f, l, fs...);
+    aal::var::transform(op, std::begin(o), f, l, fs...);
     return o;
 }
 
@@ -86,7 +89,7 @@ transform(const Op op, O &&o, I f, const I l, Is... fs) {
 template <auto start, std::size_t count>
 requires(count < std::numeric_limits<decltype(start)>::max() - start) [[nodiscard]] consteval auto iota() {
     auto ret = std::array<decltype(start), count>{};
-    std::iota(std::ranges::begin(ret), std::ranges::end(ret), start);
+    std::iota(std::begin(ret), std::end(ret), start);
     return ret;
 }
 
@@ -97,8 +100,8 @@ main() {
     using namespace boost::ut;
     [[maybe_unused]] suite tests = [] {
         static constexpr auto input = iota<0, 10U>();
-        static constexpr auto b     = std::ranges::begin(input);
-        static constexpr auto e     = std::ranges::end(input);
+        static constexpr auto b     = std::begin(input);
+        static constexpr auto e     = std::end(input);
 
         "plus"_test = [] {
             expect(1_i == plus(1));
@@ -146,7 +149,7 @@ main() {
         "transform == 3"_test = [] {
             std::array<int, sizeof(input)> output{};
             const auto result = aal::var::transform(
-              [&](const auto &...a) { return equal_to(3, a...); }, std::ranges::begin(output), b, e);
+              [&](const auto &...a) { return equal_to(3, a...); }, std::begin(output), b, e);
             expect(output[3]);
             expect(!*result);
         };
@@ -159,7 +162,7 @@ main() {
 
         "transform plus 3"_test = [&] {
             std::array<int, sizeof(input)> result{};
-            aal::var::transform([&](const auto &...a) { return plus(3, a...); }, std::ranges::begin(result), b, e);
+            aal::var::transform([&](const auto &...a) { return plus(3, a...); }, std::begin(result), b, e);
             expect(result[3] == 6_i);
         };
 
@@ -173,7 +176,7 @@ main() {
 
         "transform plus 2 times"_test = [] {
             std::array<int, sizeof(input)> result{};
-            aal::var::transform(plus, std::ranges::begin(result), b, e, b);
+            aal::var::transform(plus, std::begin(result), b, e, b);
             expect(result[3] == 6_i);
             expect(result[2] == 4_i);
             expect(result[1] == 2_i);
@@ -188,7 +191,7 @@ main() {
 
         "transform plus 3 times"_test = [] {
             std::array<int, sizeof(input)> result{};
-            aal::var::transform(plus, std::ranges::begin(result), b, e, b, b);
+            aal::var::transform(plus, std::begin(result), b, e, b, b);
             expect(result[3] == 9_i);
             expect(result[2] == 6_i);
             expect(result[1] == 3_i);
@@ -203,7 +206,7 @@ main() {
 
         "transform multiply 3 times"_test = [] {
             std::array<int, sizeof(input)> result{};
-            aal::var::transform(multiply, std::ranges::begin(result), b, e, b, b);
+            aal::var::transform(multiply, std::begin(result), b, e, b, b);
             expect(result[3] == 27_i);
             expect(result[2] == 8_i);
             expect(result[1] == 1_i);

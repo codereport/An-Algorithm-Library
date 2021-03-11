@@ -7,8 +7,8 @@ environment:
     - job_name: Linux GCC build
       appveyor_build_worker_image: Ubuntu2004
 
-#    - job_name: Linux Clang build
-#      appveyor_build_worker_image: Ubuntu2004
+    - job_name: Linux Clang build
+      appveyor_build_worker_image: Ubuntu2004
 # clang is missing <ranges> and <concepts>
 for:
   - matrix:
