@@ -11,7 +11,17 @@
     ```
 
 #### Linux or Windows w/ Clang
-
+0. Switch between GCC or Clang (linux):
+   * GCC
+   ```sh
+   export CC=gcc
+   export CXX=g++
+   ```
+   * Clang
+   ```sh
+   export CC=clang
+   export CXX=clang++
+   ```
 1. Run cmake:
     ```sh
     cd An-Algorithm-Library
