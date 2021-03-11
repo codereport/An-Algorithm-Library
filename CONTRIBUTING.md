@@ -11,13 +11,14 @@
     ```
 
 #### Linux or Windows w/ Clang
+
 0. Switch between GCC or Clang (linux):
-   * GCC
+    * GCC
    ```sh
    export CC=gcc
    export CXX=g++
    ```
-   * Clang
+    * Clang
    ```sh
    export CC=clang
    export CXX=clang++
