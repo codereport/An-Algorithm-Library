@@ -70,8 +70,7 @@ static constexpr auto make_unsigned = [](const auto &op, const auto &...a) {
  */
 
 template <typename I, typename... Is, typename O, typename Op>
-requires requires (O && o)
-{
+requires requires(O &&o) {
     std::begin(o);
 }
 [[nodiscard]] consteval auto
@@ -88,9 +87,14 @@ transform(const Op op, O &&o, I f, const I l, Is... fs) {
  */
 template <auto start, std::size_t count>
 requires(count < std::numeric_limits<decltype(start)>::max() - start) [[nodiscard]] consteval auto iota() {
-    auto ret = std::array<decltype(start), count>{};
-    std::iota(std::begin(ret), std::end(ret), start);
-    return ret;
+    // std::iota is not constexpr in clang.
+    std::array<decltype(start), count> iota_range{};
+    auto i = start;
+    aal::var::transform([&i]([[maybe_unused]] const auto &input) { return i++; },
+                        std::begin(iota_range),
+                        std::begin(iota_range),
+                        std::end(iota_range));
+    return iota_range;
 }
 
 int
@@ -148,8 +152,8 @@ main() {
 
         "transform == 3"_test = [] {
             std::array<int, sizeof(input)> output{};
-            const auto result = aal::var::transform(
-              [&](const auto &...a) { return equal_to(3, a...); }, std::begin(output), b, e);
+            const auto result =
+              aal::var::transform([&](const auto &...a) { return equal_to(3, a...); }, std::begin(output), b, e);
             expect(output[3]);
             expect(!*result);
         };
