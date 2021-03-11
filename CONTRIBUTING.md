@@ -12,7 +12,7 @@
 
 #### Linux or Windows w/ Clang
 
-0. Switch between GCC or Clang (linux):
+0. Switch between GCC or Clang, on linux:
     * GCC
    ```sh
    export CC=gcc
