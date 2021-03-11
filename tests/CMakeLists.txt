@@ -2,19 +2,5 @@ include(cmake/compiler_warnings.cmake)
 add_library(${PROJECT_NAME}_project_warnings INTERFACE)
 set_project_warnings(${PROJECT_NAME}_project_warnings ON)
 include(cmake/ut.cmake)
-add_executable(${PROJECT_NAME}_algorithm_test
-        src/algorithm_test.cpp)
-target_link_libraries(${PROJECT_NAME}_algorithm_test
-        PRIVATE Boost::ut
-        PRIVATE ${PROJECT_NAME}_aal
-        PRIVATE ${PROJECT_NAME}_project_warnings)
-#https://cliutils.gitlab.io/modern-cmake/chapters/features/cpp11.html
-target_compile_features(${PROJECT_NAME}_algorithm_test PRIVATE cxx_std_20)
-set_target_properties(${PROJECT_NAME}_algorithm_test PROPERTIES
-        OUTPUT_NAME "algorithm_test"
-        CXX_EXTENSIONS OFF
-        CXX_STANDARD_REQUIRED ON
-        WINDOWS_EXPORT_ALL_SYMBOLS OFF)
-add_test(
-        NAME ${PROJECT_NAME}_ALGORITHM_TEST COMMAND ${PROJECT_NAME}_algorithm_test
-)
+include(cmake/add_test_common.cmake)
+add_test_common(algorithm_test)
