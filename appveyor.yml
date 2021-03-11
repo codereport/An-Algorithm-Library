@@ -34,6 +34,6 @@ for:
       only:
         - job_name: Windows MSVC build
     build_script:
-      - cmd: "mkdir build\ncmake -G \"Visual Studio 16 2019\" -B build\nMSBuild build\\ALL_BUILD.vcxproj"
+      - cmd: "mkdir build\ncmake -G \"Visual Studio 16 2019\" -B build\nninja -C build" #MSBuild build\\ALL_BUILD.vcxproj
     test_script:
       - cmd: "cd build\nctest -C debug --verbose\ncd .."
