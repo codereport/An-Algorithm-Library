@@ -1,7 +1,7 @@
 # <p align="center">An Algorithm Library</p>
 
 <p align="center">
-    <a href="https://github.com/code_report/an-algorithm-library/issues" alt="contributions welcome">
+    <a href="https://github.com/codereport/an-algorithm-library/issues" alt="contributions welcome">
         <img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat" /></a>
     <a href="https://www.boost.org/LICENSE_1_0.txt" alt="Boost License">
         <img src="https://img.shields.io/badge/License-Boost-blue.svg" /></a>    
