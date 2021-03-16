@@ -16,7 +16,7 @@ find(P pred, I f, I l, Is... fs) {
 
 template <typename I, typename... Is, typename P>
 [[nodiscard]] constexpr auto
-found(P pred, I f, I l, Is... fs) {
+any_of(P pred, I f, I l, Is... fs) {
     auto const t = find(pred, f, l, fs...);
     return std::get<0>(t) != l;
 }
