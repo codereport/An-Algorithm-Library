@@ -15,14 +15,14 @@ find(P const pred, I f, I const l, Is... fs) {
 }
 
 template <typename I, typename... Is, typename P>
-[[nodiscard]] constexpr auto
+[[nodiscard]] [[maybe_unused]] constexpr auto
 found(P const pred, I f, I const l, Is... fs) {
     auto const t = find(pred, f, l, fs...);
     return std::get<0>(t) != l;
 }
 
 template <typename I, typename... Is, typename O, typename Op>
-constexpr auto
+[[maybe_unused]] constexpr auto
 transform(Op const op, O o, I f, I const l, Is... fs) {
     while (f != l) {
         *o = op(*f, *fs...);
