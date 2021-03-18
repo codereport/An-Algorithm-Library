@@ -145,8 +145,8 @@ main() {
             expect(constant<3 == *std::get<0>(result)>);
         };
 
-        "found"_test = [] {
-            static constexpr auto result = aal::var::found([&](const auto &...a) { return equal_to(3, a...); }, b, e);
+        "any_of"_test = [] {
+            static constexpr auto result = aal::var::any_of([&](const auto &...a) { return equal_to(3, a...); }, b, e);
             expect(constant<result>);
         };
 
