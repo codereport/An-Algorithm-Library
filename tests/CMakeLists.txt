@@ -1,6 +1,5 @@
 include(cmake/compiler_warnings.cmake)
-add_library(${PROJECT_NAME}_project_warnings INTERFACE)
-set_project_warnings(${PROJECT_NAME}_project_warnings ON)
+include(cmake/clang_compat.cmake)
 include(cmake/ut.cmake)
 include(cmake/add_test_common.cmake)
 add_test_common(algorithm_test)
