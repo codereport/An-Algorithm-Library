@@ -9,7 +9,7 @@ template <typename I, typename... Is, typename P>
 [[nodiscard]] constexpr auto
 find(P const pred, I f, I const l, Is... fs)
 {
-    for (;f != l;(void)++f, ((void)++fs, ...)) {
+    for (;f != l;++f, ((void)++fs, ...)) {
         if (pred(std::as_const(*f), std::as_const(*fs)...)) break;
     }
     return std::tuple{f, fs...};
@@ -25,7 +25,7 @@ any_of(P const pred, I f, I const l, Is... fs) {
 template <typename I, typename... Is, typename O, typename Op>
 constexpr auto
 transform(Op const op, O o, I f, I const l, Is... fs) {
-    for (;f != l;(void)++o, (void)++f, ((void)++fs, ...)) {
+    for (;f != l;++o, (void)++f, ((void)++fs, ...)) {
         *o = op(std::as_const(*f), std::as_const(*fs)...);
     }
     return o;
