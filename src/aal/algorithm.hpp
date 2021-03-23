@@ -10,7 +10,7 @@ template <typename I, typename... Is, typename P>
 find(P const pred, I f, I const l, Is... fs)
 {
     for (;f != l;++f, ((void)++fs, ...)) {
-        if (pred(std::as_const(*f), std::as_const(*fs)...)) break;
+        if (pred(*f, *fs...)) break;
     }
     return std::tuple{f, fs...};
 }
@@ -26,7 +26,7 @@ template <typename I, typename... Is, typename O, typename Op>
 constexpr auto
 transform(Op const op, O o, I f, I const l, Is... fs) {
     for (;f != l;++o, (void)++f, ((void)++fs, ...)) {
-        *o = op(std::as_const(*f), std::as_const(*fs)...);
+        *o = op(*f, *fs...);
     }
     return o;
 }
