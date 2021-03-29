@@ -3,6 +3,7 @@ FetchContent_Declare(
         ut
         GIT_REPOSITORY https://github.com/boost-ext/ut.git
         GIT_TAG        origin/master
+        GIT_REMOTE_UPDATE_STRATEGY CHECKOUT # this discards local changes before pulling the new data.
 )
 #FetchContent_MakeAvailable(ut)
 FetchContent_GetProperties(ut)
