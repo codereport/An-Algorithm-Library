@@ -1,0 +1,5 @@
+include(cmake/compiler_warnings.cmake)
+include(cmake/clang_compat.cmake)
+include(cmake/ut.cmake)
+include(cmake/add_test_common.cmake)
+add_test_common(algorithm_test)

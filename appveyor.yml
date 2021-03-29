@@ -1,0 +1,38 @@
+version: 1.0.{build}
+environment:
+  matrix:
+    - job_name: Windows MSVC build
+      appveyor_build_worker_image: Visual Studio 2019
+
+    - job_name: Linux GCC build
+      appveyor_build_worker_image: Ubuntu2004
+
+    - job_name: Linux Clang build
+      appveyor_build_worker_image: Ubuntu1604
+for:
+  - matrix:
+      only:
+        - job_name: Linux Clang build
+    init:
+      - sh: "#update cmake!\nsudo apt-get update\nsudo apt-get install apt-transport-https ca-certificates gnupg software-properties-common wget\nwget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | sudo tee /etc/apt/trusted.gpg.d/kitware.gpg >/dev/null\nsudo apt-add-repository 'deb https://apt.kitware.com/ubuntu/ xenial main'\nsudo apt-get -y update\nsudo apt-get -y install kitware-archive-keyring\nsudo rm /etc/apt/trusted.gpg.d/kitware.gpg\nsudo apt-get -y install cmake\nsudo apt-get -y install ninja-build\n#update clang++!\nwget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add -\n# Fingerprint: 6084 F3CF 814B 57C1 CF12 EFD5 15CF 4D18 AF4F 7421\n# i386 not available\n#sudo add-apt-repository 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial main'\n#sudo add-apt-repository 'deb-src http://apt.llvm.org/xenial/ llvm-toolchain-xenial main'\n# 11\n#sudo add-apt-repository 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-11 main'\n#sudo add-apt-repository 'deb-src http://apt.llvm.org/xenial/ llvm-toolchain-xenial-11 main'\n# 12\nsudo add-apt-repository 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-12 main'\n#sudo add-apt-repository 'deb-src http://apt.llvm.org/xenial/ llvm-toolchain-xenial-12 main'\nsudo apt-get -y update\nsudo apt-get -y -f install clang-12 clang-tools-12 clang-12-doc libclang-common-12-dev libclang-12-dev libclang1-12 clang-format-12 clangd-12\nsudo apt-get -y autoremove\nsudo apt-get -y autoclean\nsudo apt-get -y -f install libc++abi1-12 libc++abi-12-dev libc++1-12 libc++-12-dev\n#set clang++ to specific version:\nsudo update-alternatives --remove-all clang\nsudo update-alternatives --remove-all clang++\nsudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-12 90\nsudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-12 90\nexport CC=clang\nexport CXX=clang++"
+    build_script:
+      - sh: "mkdir build\ncmake -G \"Ninja Multi-Config\" -B build\nninja -C build"
+    test_script:
+      - sh: "cd build && ctest -C debug --verbose && cd .."
+
+  - matrix:
+      only:
+        - job_name: Linux GCC build
+    init:
+      - sh: "sudo update-alternatives --remove-all gcc \nsudo update-alternatives --remove-all g++\nsudo apt-get update\nsudo apt-get install apt-transport-https ca-certificates gnupg software-properties-common wget\nwget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | sudo tee /etc/apt/trusted.gpg.d/kitware.gpg >/dev/null\nsudo add-apt-repository ppa:ubuntu-toolchain-r/test\nsudo apt-add-repository 'deb https://apt.kitware.com/ubuntu/ focal main'\nsudo apt-get -y update\nsudo apt-get -y install gcc-10 g++-10 ninja-build cmake\n#sudo apt-get -y upgrade\nsudo update-alternatives --remove-all gcc\nsudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 90\nsudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-10 90\nsudo update-alternatives --install /usr/bin/cc cc /usr/bin/gcc 30\nsudo update-alternatives --set cc /usr/bin/gcc\nsudo update-alternatives --install /usr/bin/c++ c++ /usr/bin/g++ 30\nsudo update-alternatives --set c++ /usr/bin/g++\nsudo apt -y autoremove\nexport CC=gcc\nexport CXX=g++"
+    build_script:
+      - sh: "mkdir build\ncmake -G \"Ninja Multi-Config\" -B build\nninja -C build"
+    test_script:
+      - sh: "cd build && ctest -C debug --verbose && cd .."
+  - matrix:
+      only:
+        - job_name: Windows MSVC build
+    build_script:
+      - cmd: "mkdir build\ncmake -G \"Visual Studio 16 2019\" -B build\nMSBuild build\\ALL_BUILD.vcxproj"
+    test_script:
+      - cmd: "cd build\nctest -C debug --verbose\ncd .."

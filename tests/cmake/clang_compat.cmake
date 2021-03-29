@@ -1,0 +1,12 @@
+function(set_clang_compat project_name)
+    if (MSVC)
+    elseif (CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
+        target_compile_options(${project_name} INTERFACE -stdlib=libc++)
+        target_link_options(${project_name} INTERFACE -stdlib=libc++ -lc++abi)
+    elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    else ()
+    endif ()
+endfunction()
+
+add_library(${PROJECT_NAME}_clang_compat INTERFACE)
+set_clang_compat(${PROJECT_NAME}_clang_compat)
