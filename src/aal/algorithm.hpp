@@ -17,8 +17,9 @@ find(P pred, I f, I const l, Is... fs)
 
 template <typename I, typename... Is, typename P>
 [[nodiscard]] constexpr auto
-any_of(P pred, I f, I const l, Is... fs) {
-    auto const t = find(pred, f, l, fs...);
+any_of(P&& pred, I&& f, I const l, Is&&... fs) {
+    auto const t = find(std::forward<P>(pred), std::forward<I>(f), l,
+                      std::forward<Is>(fs)...);
     return std::get<0>(t) != l;
 }
 
